@@ -1,0 +1,3 @@
+app:
+  port: 10406
+  filePath: /data/upload

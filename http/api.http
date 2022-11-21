@@ -1,0 +1,13 @@
+# curl --location --request POST 'http://127.0.0.1:10406/file/upload' 
+#--form 'file=@"F:\\document\\API文档\\python\\Python3.6 中文文档.pdf"'
+POST http://127.0.0.1:10406/file/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename=""F:documentAPI文档pythonPython3.6 中文文档.pdf""
+
+< "3.6 中文文档.pdf"
+--WebAppBoundary--
+
+###
+
