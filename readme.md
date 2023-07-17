@@ -1,13 +1,45 @@
-## 文件服务器
-接口地址  
-https://www.apifox.cn/apidoc/shared-07b05f71-0cee-4886-b40c-3013c14fdcff
+## go-file-server 
+go-file-server 是一个文件服务器,包含了上传和下载功能
 
-使用curl上传
-```shell
+## Install
+```
+mkdir /opt/package/go-file-server -p
+cd /opt/package/go-file-server
+wget https://gitee.com/ppnt/go-file-server/releases/download/v1.0/go-file-server-linux-amd64-1.0.0.zip
+unzip go-file-server-linux-amd64-1.0.0.zip -d /opt/
+cd /opt/go-file-server-linux-amd64-1.0.0/
+```
+```
+mkdir config
+vi config/config.yml
+```
+
+```
+app:
+  port: 10406
+  filePath: /data/upload
+```
+```
+chmod +x go-file-server
+./go-file-server
+```
+## upload file
+```
 curl --location --request POST 'http://127.0.0.1:10406/file/upload' \
---form 'file=@"F:\\document\\API文档\\python\\Python3.6 中文文档.pdf"'
+--form 'file=@"/root/code/project/go-file-server/readme.md"'
 ```
-下载
-```shell
-http://127.0.0.1:10406/file/download/2022-11-21/1e4fa8b0-f8e4-4578-a681-58136999a5a0
+repsponse
 ```
+2023-07-17/35a3a36d-0aa4-4de0-822f-09d50ffef056
+```
+
+Directory structure
+```
+/data/upload/
+└── 2023-07-17
+└── 35a3a36d-0aa4-4de0-822f-09d50ffef056
+└── readme.md
+```
+
+## wownload file
+http://127.0.0.1:10406/file/download/2023-07-17/35a3a36d-0aa4-4de0-822f-09d50ffef056
