@@ -2,17 +2,17 @@ package config
 
 import (
   "fmt"
-  "go-file-server/log"
   "gopkg.in/yaml.v2"
   "io/ioutil"
+  "log"
 )
 
 var CONFIG *Config
 
-func init() {
-  yamlFile, err := ioutil.ReadFile("./config/config.yml")
+func ReadFile(filename string) {
+  yamlFile, err := ioutil.ReadFile(filename)
   if err != nil {
-    log.Error(err.Error())
+    log.Println(err.Error())
   }
 
   err = yaml.Unmarshal(yamlFile, &CONFIG)

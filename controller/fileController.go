@@ -4,9 +4,9 @@ import (
   "fmt"
   "github.com/google/uuid"
   "go-file-server/config"
-  "go-file-server/log"
   "io"
   "io/ioutil"
+  "log"
   "net/http"
   "os"
   "regexp"
@@ -33,18 +33,18 @@ func handleUpload(writer http.ResponseWriter, request *http.Request) {
   savePath := config.CONFIG.App.FilePath + "/" + dateString + "/" + uuidString
   isExists := IsExist(savePath)
   if !isExists {
-    log.Info("create path", savePath)
+    log.Println("create path", savePath)
     os.MkdirAll(savePath, os.ModePerm)
   }
   //读取文件名
-  log.Info("filename", header.Filename)
+  log.Println("filename", header.Filename)
 
   //上传目录 uploadPath+/+日期+uuid+filename
   filename := savePath + "/" + header.Filename
   //创建文件
   openFile, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
   if err != nil {
-    log.Error(err.Error())
+    log.Println(err.Error())
     return
   }
   defer file.Close()
@@ -59,11 +59,11 @@ func handleDownload(writer http.ResponseWriter, request *http.Request) {
   matches := pattern.FindStringSubmatch(request.URL.Path)
   if len(matches) > 0 {
     subDir := matches[1]
-    log.Info("subDir:", subDir)
+    log.Println("subDir:", subDir)
     savePath := config.CONFIG.App.FilePath + "/" + subDir
     fileInfoList, err := ioutil.ReadDir(savePath)
     if err != nil {
-      log.Error("读取文件列表失败", err.Error())
+      log.Println("读取文件列表失败", err.Error())
       fmt.Fprint(writer, "读取文件列表失败", err.Error())
       return
     }
@@ -72,14 +72,14 @@ func handleDownload(writer http.ResponseWriter, request *http.Request) {
       filePath := savePath + "/" + filename
       bytes, err := os.ReadFile(filePath)
       if err != nil {
-        log.Error("读取文件失败", err)
+        log.Println("读取文件失败", err)
         return
       }
       writer.Header().Add("Content-Type", "application/octet-stream")
       writer.Header().Add("Content-Disposition", "attachment; filename= "+filename)
       writer.Write(bytes)
     } else {
-      log.Error("没有读取到文件")
+      log.Println("没有读取到文件")
       fmt.Fprint(writer, "没有读取到文件")
     }
 

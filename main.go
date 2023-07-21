@@ -1,27 +1,31 @@
 package main
 
 import (
+  "flag"
   "go-file-server/config"
   "go-file-server/controller"
-  "go-file-server/log"
+  "log"
   "net/http"
-  "os"
   "strconv"
 )
 
+func init() {
+  //设置Flats为 日期 时间 微秒 文件名:行号
+  log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
+}
 func main() {
-  //port := "10406"
+  var configFilePath string
+  flag.StringVar(&configFilePath, "c", "config.yml", "Configuration file path")
+  flag.Parse()
+
+  // 读取配置
+  config.ReadFile(configFilePath)
+
   port := strconv.Itoa(config.CONFIG.App.Port)
-  for i := 1; i < len(os.Args); i += 2 {
-    param := os.Args[i]
-    if param == "--port" {
-      port = os.Args[i+1]
-    }
-  }
-  log.Info("start listen on", port)
+  log.Println("start listen on", port)
   controller.RegisterRoutes()
   err := http.ListenAndServe(":"+port, nil)
   if err != nil {
-    log.Error(err.Error())
+    log.Fatalln(err.Error())
   }
 }
